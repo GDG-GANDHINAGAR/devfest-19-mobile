@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:devfest_gandhinagar/universal/profileAvatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/home/home_bloc.dart';
@@ -75,13 +76,31 @@ class SpeakerPage extends StatelessWidget {
                   children: <Widget>[
                     ConstrainedBox(
                       constraints: BoxConstraints.expand(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        width: MediaQuery.of(context).size.height * 0.15,
                       ),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: speakers[i].speakerImage,
+                      child: CustomPaint(
+                        painter: ProfileAvatar(),
+                        child: Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.yellow,
+                          ),
+                          child: CircleAvatar(
+                            radius: 55,
+                            backgroundImage: CachedNetworkImageProvider(
+                              // fit: BoxFit.fill,
+                              speakers[i].speakerImage,
+                            ),
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
                       ),
+                      // child: CachedNetworkImage(
+                      //   fit: BoxFit.cover,
+                      //   imageUrl: speakers[i].speakerImage,
+                      // ),
                     ),
                     SizedBox(
                       width: 20,

@@ -7,6 +7,7 @@ import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/home/team.dart';
 import 'package:devfest_gandhinagar/universal/dev_scaffold.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
+import 'package:devfest_gandhinagar/universal/profileAvatar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -56,6 +57,7 @@ class TeamPage extends StatelessWidget {
           ],
         ),
       );
+
   @override
   Widget build(BuildContext context) {
     // var _homeBloc = HomeBloc();
@@ -76,7 +78,7 @@ class TeamPage extends StatelessWidget {
                         width: MediaQuery.of(context).size.height * 0.15,
                       ),
                       child: CustomPaint(
-                        painter: GDGAvatar(),
+                        painter: ProfileAvatar(),
                         child: Container(
                           padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
@@ -152,72 +154,5 @@ class TeamPage extends StatelessWidget {
       ),
       title: "Team",
     );
-  }
-}
-
-class GDGAvatar extends CustomPainter {
-  double x, y;
-  Random random;
-
-  GDGAvatar() {
-    random = new Random();
-  }
-
-  double getXaxis(double width) {
-    double value = width * random.nextDouble();
-    return value;
-  }
-
-  double getYaxiz(double x, Size size) {
-    final double r = (size.width / 2);
-    final double g = (size.width / 2);
-    final double h = (size.height / 2);
-    y = random.nextBool()
-        ? h + sqrt((pow(r, 2) - pow((x - g), 2)))
-        : h - sqrt((pow(r, 2) - pow((x - g), 2)));
-    return y;
-  }
-
-  
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = new Paint();
-    paint.color = Colors.green;
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = 3;
-
-    x = getXaxis(size.width);
-    y = getYaxiz(x, size);
-
-    canvas.drawRect(
-      Rect.fromCenter(
-        center: Offset(x, y),
-        height: 20,
-        width: 20,
-      ),
-      paint,
-    );
-
-    x = getXaxis(size.width);
-    y = getYaxiz(x, size);
-
-    // print("y: $y");
-    // print("x: $x");
-    // print("g: $g");
-    // print("h: $h");
-    // print("r: $r");
-
-    paint.color = Colors.blue;
-
-    canvas.drawCircle(
-      Offset(x, y),
-      9,
-      paint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
   }
 }
