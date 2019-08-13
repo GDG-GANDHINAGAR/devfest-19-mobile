@@ -59,4 +59,25 @@ List<Team> teams = [
     image:
         "https://github.com/parth181195.png",
   ),
+  Team(
+    name: "Aashutosh Rathi",
+    desc: "Organizer",
+    contribution: "Lead at IIITV",
+    image:
+        "https://github.com/aashutoshrathi.png",
+  ),
+  Team(
+    name: "Jay Mistry",
+    desc: "Organizer",
+    contribution: "Sec at IIITV Coding Club",
+    image:
+        "https://github.com/rossoskull.png",
+  ),
+  Team(
+    name: "Pushkar Patel",
+    desc: "Organizer",
+    contribution: "J Sec at IIITV Coding Club",
+    image:
+        "https://github.com/thepushkarp.png",
+  ),
 ];

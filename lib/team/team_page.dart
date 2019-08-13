@@ -7,6 +7,7 @@ import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/home/team.dart';
 import 'package:devfest_gandhinagar/universal/dev_scaffold.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
+import 'package:devfest_gandhinagar/universal/profileAvatar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -56,6 +57,7 @@ class TeamPage extends StatelessWidget {
           ],
         ),
       );
+
   @override
   Widget build(BuildContext context) {
     // var _homeBloc = HomeBloc();
@@ -72,13 +74,31 @@ class TeamPage extends StatelessWidget {
                   children: <Widget>[
                     ConstrainedBox(
                       constraints: BoxConstraints.expand(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        width: MediaQuery.of(context).size.height * 0.15,
                       ),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: teams[i].image,
+                      child: CustomPaint(
+                        painter: ProfileAvatar(),
+                        child: Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.yellow,
+                          ),
+                          child: CircleAvatar(
+                            radius: 55,
+                            backgroundImage: CachedNetworkImageProvider(
+                              // fit: BoxFit.fill,
+                              teams[i].image,
+                            ),
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
                       ),
+                      // child: CachedNetworkImage(
+                      //   fit: BoxFit.cover,
+                      //   imageUrl: teams[i].image,
+                      // ),
                     ),
                     SizedBox(
                       width: 20,
