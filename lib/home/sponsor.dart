@@ -1,26 +1,26 @@
 class Sponsor {
   String name;
-  String image;
+  // String image;
   String desc;
-  String url;
+  String redirectUrl;
   String logo;
 
-  Sponsor({this.name, this.image, this.desc, this.url, this.logo});
+  Sponsor({this.name, this.desc, this.redirectUrl, this.logo});
 
   Sponsor.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    image = json['image'];
+    // image = json['image'];
     desc = json['desc'];
-    url = json['url'];
+    redirectUrl = json['redirectUrl'];
     logo = json['logo'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['image'] = this.image;
+    // data['image'] = this.image;
     data['desc'] = this.desc;
-    data['url'] = this.url;
+    data['redirectUrl'] = this.redirectUrl;
     data['logo'] = this.logo;
     return data;
   }
