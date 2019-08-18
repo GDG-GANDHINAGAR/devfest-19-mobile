@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
+import 'package:devfest_gandhinagar/dialogs/loading_dialog.dart';
 import 'package:devfest_gandhinagar/home/sponsor.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/universal/dev_scaffold.dart';
@@ -17,15 +19,16 @@ class SponsorPage extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Container(
-            color: Colors.white,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: Center(child: LoadingDialog()),
           );
         } else {
           if (snapshot.hasError) {
             return Center(
-              child: Text("Unknown Error: ${snapshot.error}"),
+              child: ErrorDialog(
+                error: snapshot.error,
+                child: Text("Oops! Error Occured!"),
+              ),
             );
           } else {
             for (int i = 0; i < snapshot.data.documents.length; i++) {

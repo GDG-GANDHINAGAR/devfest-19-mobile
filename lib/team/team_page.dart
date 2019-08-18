@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
+import 'package:devfest_gandhinagar/dialogs/loading_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/home/speaker.dart';
@@ -69,15 +71,18 @@ class TeamPage extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Container(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             child: Center(
-              child: CircularProgressIndicator(),
+              child: LoadingDialog(),
             ),
           );
         } else {
           if (snapshot.hasError) {
             return Center(
-              child: Text("Unknown Error: ${snapshot.error}"),
+              child: ErrorDialog(
+                error: snapshot.error,
+                child: Text("Oops! Error Occured!"),
+              ),
             );
           } else {
             for (int i = 0; i < snapshot.data.documents.length; i++) {
