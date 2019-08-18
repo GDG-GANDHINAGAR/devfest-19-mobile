@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/home/speaker.dart';
@@ -13,8 +14,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class TeamPage extends StatelessWidget {
   static const String routeName = "/team";
+  static List<Team> teamList;
 
-  Widget socialActions(context) => FittedBox(
+  Widget socialActions(context, Team team) => FittedBox(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -24,7 +26,7 @@ class TeamPage extends StatelessWidget {
                 size: 15,
               ),
               onPressed: () {
-                launch(speakers[0].fbUrl);
+                launch(team.fbUrl);
               },
             ),
             IconButton(
@@ -33,7 +35,7 @@ class TeamPage extends StatelessWidget {
                 size: 15,
               ),
               onPressed: () {
-                launch(speakers[0].twitterUrl);
+                launch(team.twitterUrl);
               },
             ),
             IconButton(
@@ -42,7 +44,7 @@ class TeamPage extends StatelessWidget {
                 size: 15,
               ),
               onPressed: () {
-                launch(speakers[0].linkedinUrl);
+                launch(team.linkedinUrl);
               },
             ),
             IconButton(
@@ -51,7 +53,7 @@ class TeamPage extends StatelessWidget {
                 size: 15,
               ),
               onPressed: () {
-                launch(speakers[0].githubUrl);
+                launch(team.githubUrl);
               },
             ),
           ],
@@ -60,99 +62,121 @@ class TeamPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    teamList = List<Team>();
     // var _homeBloc = HomeBloc();
-    return DevScaffold(
-      body: ListView.builder(
-        shrinkWrap: true,
-        itemBuilder: (c, i) {
-          return Card(
-            elevation: 0.0,
-            child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    ConstrainedBox(
-                      constraints: BoxConstraints.expand(
-                        height: MediaQuery.of(context).size.height * 0.15,
-                        width: MediaQuery.of(context).size.height * 0.15,
-                      ),
-                      child: CustomPaint(
-                        painter: ProfileAvatar(),
-                        child: Container(
-                          padding: EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.yellow,
-                          ),
-                          child: CircleAvatar(
-                            radius: 55,
-                            backgroundImage: CachedNetworkImageProvider(
-                              // fit: BoxFit.fill,
-                              teams[i].image,
-                            ),
-                            backgroundColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                      // child: CachedNetworkImage(
-                      //   fit: BoxFit.cover,
-                      //   imageUrl: teams[i].image,
-                      // ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
+    return FutureBuilder<QuerySnapshot>(
+      future: Firestore.instance.collection("team").getDocuments(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return Container(
+            color: Colors.white,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text("Unknown Error: ${snapshot.error}"),
+            );
+          } else {
+            for (int i = 0; i < snapshot.data.documents.length; i++) {
+              teamList.add(Team.fromJson(snapshot.data.documents[i].data));
+            }
+            return DevScaffold(
+              title: "Team",
+              body: ListView.builder(
+                itemCount: teamList.length,
+                shrinkWrap: true,
+                itemBuilder: (c, i) {
+                  return Card(
+                    elevation: 0.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text(
-                                teams[i].name,
-                                style: Theme.of(context).textTheme.title,
+                          ConstrainedBox(
+                            constraints: BoxConstraints.expand(
+                              height: MediaQuery.of(context).size.height * 0.15,
+                              width: MediaQuery.of(context).size.height * 0.15,
+                            ),
+                            child: CustomPaint(
+                              painter: ProfileAvatar(),
+                              child: Container(
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.yellow,
+                                ),
+                                child: CircleAvatar(
+                                  radius: 55,
+                                  backgroundImage: CachedNetworkImageProvider(
+                                    teamList[i].image,
+                                  ),
+                                  backgroundColor: Colors.white,
+                                ),
                               ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              AnimatedContainer(
-                                duration: Duration(seconds: 1),
-                                width: MediaQuery.of(context).size.width * 0.2,
-                                height: 5,
-                                color: Tools.multiColors[Random().nextInt(4)],
-                              ),
-                            ],
+                            ),
                           ),
                           SizedBox(
-                            height: 10,
+                            width: 20,
                           ),
-                          socialActions(context),
-                          Text(
-                            teams[i].desc,
-                            style: Theme.of(context).textTheme.subtitle,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            teams[i].contribution,
-                            style: Theme.of(context).textTheme.caption,
-                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text(
+                                      teamList[i].name,
+                                      style: Theme.of(context).textTheme.title,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    AnimatedContainer(
+                                      duration: Duration(seconds: 1),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      height: 5,
+                                      color: Tools
+                                          .multiColors[Random().nextInt(4)],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                socialActions(context, teamList[i]),
+                                Text(
+                                  teamList[i].desc,
+                                  style: Theme.of(context).textTheme.subtitle,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  teamList[i].contribution,
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
-                    )
-                  ],
-                )),
-          );
-        },
-        itemCount: teams.length,
-      ),
-      title: "Team",
+                    ),
+                  );
+                },
+              ),
+            );
+          }
+        }
+      },
     );
   }
 }
