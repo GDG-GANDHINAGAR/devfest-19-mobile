@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
-import 'package:devfest_gandhinagar/dialogs/loading_dialog.dart';
 import 'package:devfest_gandhinagar/universal/profileAvatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:devfest_gandhinagar/home/index.dart';
 import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/universal/dev_scaffold.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -75,7 +75,9 @@ class SpeakerPage extends StatelessWidget {
           return Container(
             color: Theme.of(context).scaffoldBackgroundColor,
             child: Center(
-              child: LoadingDialog(),
+              child: SpinKitChasingDots(
+                color: Colors.red,
+              ),
             ),
           );
         } else {
