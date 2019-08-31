@@ -5,8 +5,10 @@ import 'package:devfest_gandhinagar/home/session.dart';
 
 class MobileScreen extends StatelessWidget {
   final HomeBloc homeBloc;
+  final List<Session> sessions;
 
-  const MobileScreen({Key key, this.homeBloc}) : super(key: key);
+  const MobileScreen({Key key, this.homeBloc, @required this.sessions})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     var mobileSessions = sessions.where((s) => s.track == "mobile").toList();

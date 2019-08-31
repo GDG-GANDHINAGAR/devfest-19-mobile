@@ -10,17 +10,18 @@ class Team {
   String githubUrl;
   String contribution;
 
-  Team(
-      {this.name,
-      this.desc,
-      this.job,
-      this.image,
-      this.speciality,
-      this.fbUrl,
-      this.twitterUrl,
-      this.linkedinUrl,
-      this.githubUrl,
-      this.contribution});
+  Team({
+    this.name,
+    this.desc,
+    this.job,
+    this.image,
+    this.speciality,
+    this.fbUrl,
+    this.twitterUrl,
+    this.linkedinUrl,
+    this.githubUrl,
+    this.contribution,
+  });
 
   Team.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -51,33 +52,33 @@ class Team {
   }
 }
 
-List<Team> teams = [
-  Team(
-    name: "Parth Jansari",
-    desc: "Organizer",
-    contribution: "Lead at GDG Gandhinagar",
-    image:
-        "https://github.com/parth181195.png",
-  ),
-  Team(
-    name: "Aashutosh Rathi",
-    desc: "Organizer",
-    contribution: "Lead at IIITV",
-    image:
-        "https://github.com/aashutoshrathi.png",
-  ),
-  Team(
-    name: "Jay Mistry",
-    desc: "Organizer",
-    contribution: "Sec at IIITV Coding Club",
-    image:
-        "https://github.com/rossoskull.png",
-  ),
-  Team(
-    name: "Pushkar Patel",
-    desc: "Organizer",
-    contribution: "J Sec at IIITV Coding Club",
-    image:
-        "https://github.com/thepushkarp.png",
-  ),
-];
+// List<Team> teams = [
+//   Team(
+//     name: "Parth Jansari",
+//     desc: "Organizer",
+//     contribution: "Lead at GDG Gandhinagar",
+//     image:
+//         "https://github.com/parth181195.png",
+//   ),
+//   Team(
+//     name: "Aashutosh Rathi",
+//     desc: "Organizer",
+//     contribution: "Lead at IIITV",
+//     image:
+//         "https://github.com/aashutoshrathi.png",
+//   ),
+//   Team(
+//     name: "Jay Mistry",
+//     desc: "Organizer",
+//     contribution: "Sec at IIITV Coding Club",
+//     image:
+//         "https://github.com/rossoskull.png",
+//   ),
+//   Team(
+//     name: "Pushkar Patel",
+//     desc: "Organizer",
+//     contribution: "J Sec at IIITV Coding Club",
+//     image:
+//         "https://github.com/thepushkarp.png",
+//   ),
+// ];

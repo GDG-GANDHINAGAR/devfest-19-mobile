@@ -248,6 +248,7 @@ class ActionCard extends StatelessWidget {
             ),
             Text(
               title,
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.title.copyWith(
                     fontSize: 12,
                   ),
