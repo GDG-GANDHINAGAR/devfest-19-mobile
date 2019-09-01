@@ -33,8 +33,8 @@ class Devfest {
 
   //* Images
   static const String home_img = "assets/images/home_img.jpeg";
-  static const String banner_light = "assets/images/banner_light.png";
-  static const String banner_dark = "assets/images/banner_dark.png";
+  static const String banner_light = "assets/images/banner_light.jpg";
+  static const String banner_dark = "assets/images/banner_dark.jpg";
 
   //*  Texts
   static const String welcomeText = "DevFest Gandhinagar 2019";
