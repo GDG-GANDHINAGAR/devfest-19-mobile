@@ -126,7 +126,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
               SizedBox(
                 height: 15,
               ),
-              RaisedButton(
+              MaterialButton(
+                color: Tools.multiColors[Random().nextInt(3)],
                 child: Text("Submit"),
                 onPressed: _validateAndSave,
               ),
