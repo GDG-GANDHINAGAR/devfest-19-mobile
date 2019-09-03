@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -83,48 +84,33 @@ class _FeedbackPageState extends State<FeedbackPage> {
           key: _formKey,
           autovalidate: true,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              _starRowBuilder(),
-              SizedBox(
-                height: 15,
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: _starRowBuilder(),
               ),
-              TextFormField(
-                autocorrect: true,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return "Name cannot be Empty!";
-                  } else {
-                    return null;
-                  }
-                },
-                controller: _nameController,
-                maxLines: 1,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
-                textInputAction: TextInputAction.done,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(5),
-                  labelText: "Name",
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 2, vertical: 25),
+                child: TextFormField(
+                  autocorrect: true,
+                  controller: _feedbackControler,
+                  maxLines: 5,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.sentences,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(5),
+                    hintText: "We'd love to hear from you !",
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                autocorrect: true,
-                controller: _feedbackControler,
-                maxLines: 5,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
-                textInputAction: TextInputAction.done,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(5),
-                  labelText: "We'd love to hear from you !",
-                ),
-              ),
-              SizedBox(
-                height: 15,
               ),
               RaisedButton(
                 child: Text("Submit"),
@@ -184,7 +170,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
           .document(DateTime.now().millisecondsSinceEpoch.toString())
           .setData({
         "feedback": _feedbackControler.text,
-        "name": _nameController.text,
+        "name": Devfest.prefs.getString(Devfest.displayNamePref),
+        "email": Devfest.prefs.getString(Devfest.emailPref),
         "time": DateTime.now().toIso8601String(),
         "stars": _starRating,
       });
