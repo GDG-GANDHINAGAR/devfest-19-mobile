@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
 import 'package:devfest_gandhinagar/home/sponsor.dart';
+import 'package:devfest_gandhinagar/utils/tools.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/universal/dev_scaffold.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,7 +25,7 @@ class SponsorPage extends StatelessWidget {
             color: Theme.of(context).scaffoldBackgroundColor,
             child: Center(
               child: SpinKitChasingDots(
-                color: Colors.red,
+                color: Tools.multiColors[Random().nextInt(3)],
               ),
             ),
           );

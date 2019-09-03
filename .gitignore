@@ -10,6 +10,7 @@
 .history
 .svn/
 google-services.json
+gifs/
 
 # IntelliJ related
 *.iml

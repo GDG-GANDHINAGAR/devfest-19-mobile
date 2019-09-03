@@ -63,9 +63,12 @@ class HomeScreenState extends State<HomeScreen> {
             HomeState currentState,
           ) {
             if (currentState is UnHomeState) {
-              return Center(
-                child: SpinKitChasingDots(
-                  color: Tools.multiColors[Random().nextInt(3)],
+              return Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Center(
+                  child: SpinKitChasingDots(
+                    color: Tools.multiColors[Random().nextInt(3)],
+                  ),
                 ),
               );
             }

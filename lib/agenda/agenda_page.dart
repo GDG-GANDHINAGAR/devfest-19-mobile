@@ -28,7 +28,7 @@ class AgendaPage extends StatelessWidget {
             color: Theme.of(context).scaffoldBackgroundColor,
             child: Center(
               child: SpinKitChasingDots(
-                color: Colors.red,
+                color: Tools.multiColors[Random().nextInt(3)],
               ),
             ),
           );
