@@ -53,10 +53,11 @@ class _ConfigPageState extends State<ConfigPage> {
                   configBloc.darkModeOn ? Colors.black : Colors.grey[50],
               brightness:
                   configBloc.darkModeOn ? Brightness.dark : Brightness.light,
-              buttonTheme: Theme.of(context).buttonTheme.copyWith(
-                  colorScheme: configBloc.darkModeOn
-                      ? ColorScheme.dark()
-                      : ColorScheme.light()),
+              buttonColor: configBloc.darkModeOn ? Colors.blueGrey : Colors.lightGreen,
+              // buttonTheme: Theme.of(context).buttonTheme.copyWith(
+              //     colorScheme: configBloc.darkModeOn
+              //         ? ColorScheme.dark()
+              //         : ColorScheme.light()),
               appBarTheme: AppBarTheme(
                 elevation: 0.0,
               ),
