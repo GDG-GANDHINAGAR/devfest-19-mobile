@@ -1,3 +1,4 @@
+import 'package:devfest_gandhinagar/signin/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:devfest_gandhinagar/agenda/agenda_page.dart';
@@ -62,7 +63,7 @@ class _ConfigPageState extends State<ConfigPage> {
                 elevation: 0.0,
               ),
             ),
-            home: HomePage(),
+            home: SignInPage(),
             routes: {
               HomePage.routeName: (context) => HomePage(),
               SpeakerPage.routeName: (context) => SpeakerPage(),
