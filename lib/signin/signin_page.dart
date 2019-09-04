@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatelessWidget {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -28,14 +27,118 @@ class SignInPage extends StatelessWidget {
           }
           return DevScaffold(
             title: "Sign In",
-            body: Center(
-              child: RaisedButton(
-                child: Text("Sign In"),
-                onPressed: () async {
-                  FirebaseUser user = await _handleGoogleSignIn();
-                  setBasicData(user);
-                },
-              ),
+            body: Stack(
+              children: <Widget>[
+                Positioned(
+                  child: Image.asset("assets/images/doodles/Ellipse 101.png"),
+                  bottom: MediaQuery.of(context).size.height / 4.7,
+                  right: -1 * MediaQuery.of(context).size.width / 20,
+                ),
+                Positioned(
+                  child: Image.asset("assets/images/doodles/Ellipse 107.png"),
+                  right: MediaQuery.of(context).size.width / 12,
+                  top: MediaQuery.of(context).size.height / 3.3,
+                ),
+                Positioned(
+                  child: Image.asset("assets/images/doodles/Group 60.png"),
+                  left: -1 * MediaQuery.of(context).size.width / 40,
+                  top: MediaQuery.of(context).size.height / 3,
+                ),
+                Positioned(
+                  child: Image.asset("assets/images/doodles/Group 61.png"),
+                  top: MediaQuery.of(context).size.height / 30,
+                  right: MediaQuery.of(context).size.width / 1.12,
+                ),
+                Positioned(
+                  child: Image.asset("assets/images/doodles/Path 112.png"),
+                  left: MediaQuery.of(context).size.width / 1.1,
+                ),
+                Positioned(
+                  child: Image.asset("assets/images/doodles/Path 127.png"),
+                  top: MediaQuery.of(context).size.height / 1.7,
+                  right: MediaQuery.of(context).size.width / 1.09,
+                ),
+                Positioned(
+                  child: Image.asset("assets/images/doodles/Path 133.png"),
+                  top: MediaQuery.of(context).size.height / 1.28,
+                  left: MediaQuery.of(context).size.width / 1.2,
+                ),
+                Positioned(
+                  child: Image.asset("assets/images/doodles/Path 134.png"),
+                  top: MediaQuery.of(context).size.height / 1.28,
+                  right: MediaQuery.of(context).size.width / 1.25,
+                ),
+                Positioned(
+                  child: Image.asset("assets/images/doodles/Path 135.png"),
+                  bottom: MediaQuery.of(context).size.height / 1.24,
+                  left: MediaQuery.of(context).size.width / 2,
+                ),
+                Positioned(
+                  child: Image.asset("assets/images/doodles/Path 136.png"),
+                  top: MediaQuery.of(context).size.height / 1.25,
+                  left: MediaQuery.of(context).size.width / 2.5,
+                ),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 10,
+                      ),
+                      Image.asset(
+                        Devfest.prefs.getBool(Devfest.darkModePref) ?? false
+                            ? "assets/images/devfest_logo_dark.png"
+                            : "assets/images/devfest_logo_light.png",
+                        scale: 1.15,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 10,
+                      ),
+                      Image.asset(
+                        "assets/images/google_logo.png",
+                        scale: 1.9,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 25,
+                      ),
+                      OutlineButton(
+                        borderSide: BorderSide(
+                          color: Devfest.prefs.getBool(Devfest.darkModePref) ??
+                                  false
+                              ? Colors.white
+                              : Colors.grey,
+                        ),
+                        highlightedBorderColor: Colors.transparent,
+                        highlightColor: Colors.green,
+                        highlightElevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          // side: BorderSide(
+                          //   color: Devfest.prefs.getBool(Devfest.darkModePref)
+                          //       ? Colors.white
+                          //       : Colors.grey,
+                          // ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 25,
+                            vertical: 6,
+                          ),
+                          child: Text(
+                            "Sign In",
+                            textScaleFactor: 1.4,
+                            style: TextStyle(),
+                          ),
+                        ),
+                        onPressed: () async {
+                          FirebaseUser user = await _handleGoogleSignIn();
+                          setBasicData(user);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           );
         }
