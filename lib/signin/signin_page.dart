@@ -160,7 +160,7 @@ class SignInPage extends StatelessWidget {
   }
 
   void setBasicData(FirebaseUser user) async {
-    await Firestore.instance.collection('users').document(user.uid).setData(
+    await Firestore.instance.collection('users').document(user.email).setData(
       {
         "display_name": user.displayName,
         "email": user.email,
