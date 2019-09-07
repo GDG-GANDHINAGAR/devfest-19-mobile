@@ -8,7 +8,7 @@ class Team {
   String twitterUrl;
   String linkedinUrl;
   String githubUrl;
-  String contribution;
+  String team;
 
   Team({
     this.name,
@@ -20,7 +20,7 @@ class Team {
     this.twitterUrl,
     this.linkedinUrl,
     this.githubUrl,
-    this.contribution,
+    this.team,
   });
 
   Team.fromJson(Map<String, dynamic> json) {
@@ -33,7 +33,7 @@ class Team {
     twitterUrl = json['twitter_url'];
     linkedinUrl = json['linkedin_url'];
     githubUrl = json['github_url'];
-    contribution = json['contribution'];
+    team = json['team'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,38 +47,7 @@ class Team {
     data['twitter_url'] = this.twitterUrl;
     data['linkedin_url'] = this.linkedinUrl;
     data['github_url'] = this.githubUrl;
-    data['contribution'] = this.contribution;
+    data['team'] = this.team;
     return data;
   }
 }
-
-// List<Team> teams = [
-//   Team(
-//     name: "Parth Jansari",
-//     desc: "Organizer",
-//     contribution: "Lead at GDG Gandhinagar",
-//     image:
-//         "https://github.com/parth181195.png",
-//   ),
-//   Team(
-//     name: "Aashutosh Rathi",
-//     desc: "Organizer",
-//     contribution: "Lead at IIITV",
-//     image:
-//         "https://github.com/aashutoshrathi.png",
-//   ),
-//   Team(
-//     name: "Jay Mistry",
-//     desc: "Organizer",
-//     contribution: "Sec at IIITV Coding Club",
-//     image:
-//         "https://github.com/rossoskull.png",
-//   ),
-//   Team(
-//     name: "Pushkar Patel",
-//     desc: "Organizer",
-//     contribution: "J Sec at IIITV Coding Club",
-//     image:
-//         "https://github.com/thepushkarp.png",
-//   ),
-// ];

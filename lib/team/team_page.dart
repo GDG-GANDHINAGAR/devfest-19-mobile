@@ -66,9 +66,10 @@ class TeamPage extends StatelessWidget {
   Widget build(BuildContext context) {
     teamList = List<Team>();
     // var _homeBloc = HomeBloc();
-    return FutureBuilder<QuerySnapshot>(
-      future: Firestore.instance.collection("team").getDocuments(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    return FutureBuilder<DocumentSnapshot>(
+      future: Firestore.instance.collection("team").document("data").get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Container(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -87,8 +88,9 @@ class TeamPage extends StatelessWidget {
               ),
             );
           } else {
-            for (int i = 0; i < snapshot.data.documents.length; i++) {
-              teamList.add(Team.fromJson(snapshot.data.documents[i].data));
+            for (int i = 0; i < snapshot.data.data["data"].length; i++) {
+              teamList.add(Team.fromJson(
+                  Map<String, dynamic>.from(snapshot.data.data["data"][i])));
             }
             return DevScaffold(
               title: "Team",
@@ -154,21 +156,25 @@ class TeamPage extends StatelessWidget {
                                       color: Tools
                                           .multiColors[Random().nextInt(4)],
                                     ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      teamList[i].job,
+                                      style:
+                                          Theme.of(context).textTheme.subtitle,
+                                    ),
                                   ],
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
                                 socialActions(context, teamList[i]),
-                                Text(
-                                  teamList[i].desc,
-                                  style: Theme.of(context).textTheme.subtitle,
-                                ),
                                 SizedBox(
                                   height: 10,
                                 ),
                                 Text(
-                                  teamList[i].contribution,
+                                  teamList[i].team,
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                               ],
