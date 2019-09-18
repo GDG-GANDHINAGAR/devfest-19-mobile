@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/agenda/agenda_page.dart';
 import 'package:devfest_gandhinagar/config/index.dart';
@@ -76,7 +77,8 @@ class HomeFront extends StatelessWidget {
             shape: StadiumBorder(),
             color: Colors.brown,
             colorBrightness: Brightness.dark,
-            onPressed: () => Navigator.pushNamed(context, FeedbackPage.routeName),
+            onPressed: () =>
+                Navigator.pushNamed(context, FeedbackPage.routeName),
           ),
           RaisedButton(
             child: Text("Locate Us"),
@@ -125,12 +127,45 @@ class HomeFront extends StatelessWidget {
             title: Devfest.map_text,
             onPressed: () => Navigator.pushNamed(context, MapPage.routeName),
           ),
-          ActionCard(
-            icon: Icons.feedback,
-            color: Colors.blue,
-            title: Devfest.feedback_text,
-            onPressed: () => Navigator.pushNamed(context, FeedbackPage.routeName),
-          )
+          StreamBuilder<DocumentSnapshot>(
+            stream: Firestore.instance
+                .collection("homepage")
+                .document("data")
+                .snapshots(),
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.none ||
+                  snapshot.connectionState == ConnectionState.waiting) {
+                return Container(
+                  width: 0,
+                  height: 0,
+                );
+              } else {
+                if (snapshot.hasError) {
+                  print("Has error ${snapshot.error}");
+                  return Container(
+                    width: 0,
+                    height: 0,
+                  );
+                } else {
+                  if (snapshot.data.data["meta"]["feedback_active"] == true) {
+                    return ActionCard(
+                      icon: Icons.feedback,
+                      color: Colors.blue,
+                      title: Devfest.feedback_text,
+                      onPressed: () =>
+                          Navigator.pushNamed(context, FeedbackPage.routeName),
+                    );
+                  } else {
+                    return Container(
+                      width: 0,
+                      height: 0,
+                    );
+                  }
+                }
+              }
+            },
+          ),
         ],
       );
 
