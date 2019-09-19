@@ -1,3 +1,4 @@
+import 'package:devfest_gandhinagar/id/id_page.dart';
 import 'package:devfest_gandhinagar/signin/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,6 +75,7 @@ class _ConfigPageState extends State<ConfigPage> {
               FeedbackPage.routeName: (context) => FeedbackPage(),
               FindDevFestPage.routeName: (context) => FindDevFestPage(),
               MapPage.routeName: (context) => MapPage(),
+              IDPage.routeName: (context) => IDPage(),
             },
           );
         },

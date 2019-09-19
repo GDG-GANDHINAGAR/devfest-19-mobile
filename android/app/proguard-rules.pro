@@ -26,3 +26,7 @@
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
+-ignorewarnings
+-keep class * {
+    public private *;
+}

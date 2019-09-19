@@ -160,6 +160,12 @@ class SignInPage extends StatelessWidget {
   }
 
   void setBasicData(FirebaseUser user) async {
+    
+    Devfest.prefs.setString(Devfest.displayNamePref, user.displayName);
+    Devfest.prefs.setString(Devfest.emailPref, user.email);
+    Devfest.prefs.setString(Devfest.uidPref, user.uid);
+    Devfest.prefs.setString(Devfest.photoPref, user.photoUrl);
+
     await Firestore.instance.collection('users').document(user.email).setData(
       {
         "display_name": user.displayName,
@@ -168,7 +174,5 @@ class SignInPage extends StatelessWidget {
         "photo_url": user.photoUrl,
       },
     );
-    Devfest.prefs.setString(Devfest.displayNamePref, user.displayName);
-    Devfest.prefs.setString(Devfest.emailPref, user.email);
   }
 }
