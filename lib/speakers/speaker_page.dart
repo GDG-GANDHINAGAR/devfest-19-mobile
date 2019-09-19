@@ -68,9 +68,9 @@ class SpeakerPage extends StatelessWidget {
     // var state = _homeBloc.currentState as InHomeState;
     // var speakers = state.speakersData.speakers;
     speakerList = List<Speaker>();
-    return FutureBuilder<QuerySnapshot>(
-      future: Firestore.instance.collection("speaker").getDocuments(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    return FutureBuilder<DocumentSnapshot>(
+      future: Firestore.instance.collection("speakers").document("data").get(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Container(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -89,9 +89,9 @@ class SpeakerPage extends StatelessWidget {
               ),
             );
           } else {
-            for (int i = 0; i < snapshot.data.documents.length; i++) {
-              speakerList
-                  .add(Speaker.fromJson(snapshot.data.documents[i].data));
+            for (int i = 0; i < snapshot.data.data["data"].length; i++) {
+              speakerList.add(Speaker.fromJson(
+                  Map<String, dynamic>.from(snapshot.data.data["data"][i])));
             }
             return DevScaffold(
               title: "Speakers",
