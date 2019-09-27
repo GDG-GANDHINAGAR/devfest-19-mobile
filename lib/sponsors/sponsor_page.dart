@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
 import 'package:devfest_gandhinagar/home/sponsor.dart';
+import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/universal/dev_scaffold.dart';
@@ -17,43 +18,49 @@ class SponsorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // var _homeBloc = HomeBloc();
-    return FutureBuilder<DocumentSnapshot>(
-      future: Firestore.instance.collection("homepage").document("data").get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: Center(
-              child: SpinKitChasingDots(
-                color: Tools.multiColors[Random().nextInt(3)],
-              ),
-            ),
-          );
-        } else {
-          if (snapshot.hasError) {
-            return Center(
-              child: ErrorDialog(
-                error: snapshot.error,
-                child: Text("Oops! Error Occured!"),
+    return DevScaffold(
+      title: "Sponsors",
+      body: FutureBuilder<DocumentSnapshot>(
+        future:
+            Firestore.instance.collection("homepage").document("data").get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Center(
+                child: SpinKitChasingDots(
+                  color: Tools.multiColors[Random().nextInt(3)],
+                ),
               ),
             );
           } else {
-            Map<String, List<dynamic>> map =
-                Map<String, List<dynamic>>.from(snapshot.data.data["sponsors"]);
+            if (snapshot.hasError) {
+              return Center(
+                child: ErrorDialog(
+                  error: snapshot.error,
+                  child: Text(Devfest.some_error_text),
+                ),
+              );
+            } else {
+              Map<String, List<dynamic>> map = Map<String, List<dynamic>>.from(
+                  snapshot.data.data["sponsors"]);
 
-            int count = 0;
-            for (int i = 0; i < map.length; i++) {
-              String sponsorCategory = map.keys.toList()[i];
-              for (int j = 0; j < map[sponsorCategory].length; j++) {
-                sponsorsList
-                    .add(Sponsor.fromJson(Map.from(map[sponsorCategory][j])));
-                count++;
+              int count = 0;
+              for (int i = 0; i < map.length; i++) {
+                String sponsorCategory = map.keys.toList()[i];
+                for (int j = 0; j < map[sponsorCategory].length; j++) {
+                  sponsorsList
+                      .add(Sponsor.fromJson(Map.from(map[sponsorCategory][j])));
+                  count++;
+                }
               }
-            }
-            return DevScaffold(
-              title: "Sponsors",
-              body: ListView.builder(
+              if (sponsorsList.length < 1) {
+                return Center(
+                  child: Text(Devfest.comingSoonText),
+                );
+              }
+              return ListView.builder(
                 itemCount: count,
                 itemBuilder: (BuildContext context, int i) {
                   return SponsorImage(
@@ -61,11 +68,11 @@ class SponsorPage extends StatelessWidget {
                     url: sponsorsList[i].url,
                   );
                 },
-              ),
-            );
+              );
+            }
           }
-        }
-      },
+        },
+      ),
     );
   }
 }

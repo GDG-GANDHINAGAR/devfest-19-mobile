@@ -11,9 +11,7 @@ class WebScreen extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var webSessions = sessions
-        .where((s) => s.track != "mobile" && s.track != "cloud")
-        .toList();
+    var webSessions = sessions.where((s) => s.track == "web").toList();
     return SessionList(
       allSessions: webSessions,
     );

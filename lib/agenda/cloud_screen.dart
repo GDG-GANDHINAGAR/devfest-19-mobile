@@ -7,10 +7,12 @@ class CloudScreen extends StatelessWidget {
   final HomeBloc homeBloc;
   final List<Session> sessions;
 
-  const CloudScreen({Key key, this.homeBloc,@required this.sessions}) : super(key: key);
+  const CloudScreen({Key key, this.homeBloc, @required this.sessions})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var cloudSessions = sessions.where((s) => s.track == "cloud").toList();
+    var cloudSessions =
+        sessions.where((s) => s.track == "cloud" || s.track == "misc").toList();
     return SessionList(
       allSessions: cloudSessions,
     );
