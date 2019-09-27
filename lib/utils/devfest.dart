@@ -65,10 +65,12 @@ class Devfest {
   static const String faq_text = "FAQ";
   static const String map_text = "Navigate to Us";
   static const String feedback_text = "Feedback";
+  static const String show_id_text = "Show ID";
 
   //* Preferences
   static SharedPreferences prefs;
   static const String loggedInPref = "loggedInPref1";
+  static const String uidPref = "uidPref";
   static const String displayNamePref = "displayNamePref";
   static const String emailPref = "emailPref";
   static const String phonePref = "phonePref";

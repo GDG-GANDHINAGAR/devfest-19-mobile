@@ -27,8 +27,6 @@
     java.lang.Object readResolve();
 }
 -ignorewarnings
-
 -keep class * {
     public private *;
 }
-
