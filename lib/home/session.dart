@@ -31,7 +31,7 @@ class Session {
 
   Session.fromJson(Map<String, dynamic> json) {
     sessionId = json['session_id'];
-    sessionTitle = json['session_title'];
+    sessionTitle = json['speaker_session'];
     sessionDesc = json['session_desc'];
     sessionImage = json['session_image'];
     sessionStartTime = json['session_start_time'];
@@ -48,7 +48,7 @@ class Session {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['session_id'] = this.sessionId;
-    data['session_title'] = this.sessionTitle;
+    data['speaker_session'] = this.sessionTitle;
     data['session_desc'] = this.sessionDesc;
     data['session_image'] = this.sessionImage;
     data['session_start_time'] = this.sessionStartTime;

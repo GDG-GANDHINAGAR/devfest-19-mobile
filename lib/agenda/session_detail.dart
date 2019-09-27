@@ -15,6 +15,7 @@ class SessionDetail extends StatelessWidget {
   static const String routeName = "/session_detail";
   final Session session;
   static Speaker speaker = Speaker();
+  static List<Speaker> speakerList;
 
   SessionDetail({Key key, @required this.session}) : super(key: key);
 
@@ -65,14 +66,16 @@ class SessionDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // var _homeBloc = HomeBloc();
+    speakerList = List<Speaker>();
     return DevScaffold(
       title: session.speakerName,
-      body: FutureBuilder<QuerySnapshot>(
-        future: Firestore.instance
-            .collection("speaker")
-            .where("speaker_id", isEqualTo: session.speakerId)
-            .getDocuments(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: FutureBuilder<DocumentSnapshot>(
+        future:
+            Firestore.instance.collection("speakers").document("data").get(),
+        // .where("speaker_id", isEqualTo: session.speakerId)
+        // .getDocuments(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.connectionState != ConnectionState.done &&
               snapshot.connectionState != ConnectionState.active) {
             return Container(
@@ -84,7 +87,17 @@ class SessionDetail extends StatelessWidget {
               ),
             );
           } else {
-            speaker = Speaker.fromJson(snapshot.data.documents.first.data);
+            // speaker = Speaker.fromJson(snapshot.data.documents.first.data);
+            // print("No. of docs: ${snapshot.data.data["data"].length}");
+            for (int i = 0; i < snapshot.data.data["data"].length; i++) {
+              speakerList.add(Speaker.fromJson(
+                  Map<String, dynamic>.from(snapshot.data.data["data"][i])));
+              print(
+                  "Speaker id: ${speakerList[i].speakerId} Name: ${speakerList[i].speakerName} Session id: ${session.speakerId}");
+              if (speakerList[i].speakerId == session.speakerId) {
+                speaker = speakerList[i];
+              }
+            }
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -93,11 +106,11 @@ class SessionDetail extends StatelessWidget {
                   children: <Widget>[
                     Center(
                       child: Hero(
-                        tag: session.speakerImage,
+                        tag: speaker.speakerImage,
                         child: CircleAvatar(
                           radius: 100.0,
                           backgroundImage: CachedNetworkImageProvider(
-                            session.speakerImage,
+                            speaker.speakerImage,
                           ),
                         ),
                       ),
@@ -106,7 +119,7 @@ class SessionDetail extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      "${session.speakerDesc}",
+                      "${speaker.speakerDesc}",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.title.copyWith(
                             fontSize: 14,
@@ -117,7 +130,7 @@ class SessionDetail extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      "${session.sessionTitle}",
+                      "${speaker.speakerSession}",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.title.copyWith(
                             fontSize: 20,
@@ -128,7 +141,7 @@ class SessionDetail extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      session.sessionDesc,
+                      speaker.sessionDetail,
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
