@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/agenda/session_detail.dart';
 import 'package:devfest_gandhinagar/home/session.dart';
@@ -12,11 +13,15 @@ class SessionList extends StatelessWidget {
   const SessionList({Key key, @required this.allSessions}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    if (allSessions.length < 1) {
+      return Center(
+        child: Text(Devfest.comingSoonText),
+      );
+    }
     return ListView.builder(
       shrinkWrap: false,
       itemCount: allSessions.length,
       itemBuilder: (c, i) {
-        // return Text("sdd");
         return Card(
           elevation: 0.0,
           child: ListTile(
@@ -30,7 +35,6 @@ class SessionList extends StatelessWidget {
                 ),
               );
             },
-            // dense: true,
             isThreeLine: true,
             trailing: RichText(
               textAlign: TextAlign.center,

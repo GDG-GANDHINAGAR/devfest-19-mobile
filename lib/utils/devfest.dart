@@ -52,6 +52,7 @@ class Devfest {
   static const String supportText = "Support Needed";
   static const String featureText = "Feature Request";
   static const String moreFeatureText = "More Features coming soon.";
+  static const String comingSoonText = "More Details coming soon.";
   static const String updateNowText =
       "Please update your app for seamless experience.";
   static const String checkNetText =

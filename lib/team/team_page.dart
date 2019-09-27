@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
+import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/home/speaker.dart';
@@ -66,35 +67,41 @@ class TeamPage extends StatelessWidget {
   Widget build(BuildContext context) {
     teamList = List<Team>();
     // var _homeBloc = HomeBloc();
-    return FutureBuilder<DocumentSnapshot>(
-      future: Firestore.instance.collection("team").document("data").get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: Center(
-              child: SpinKitChasingDots(
-                color: Tools.multiColors[Random().nextInt(3)],
-              ),
-            ),
-          );
-        } else {
-          if (snapshot.hasError) {
-            return Center(
-              child: ErrorDialog(
-                error: snapshot.error,
-                child: Text("Oops! Error Occured!"),
+    return DevScaffold(
+      title: "Team",
+      body: FutureBuilder<DocumentSnapshot>(
+        future: Firestore.instance.collection("team").document("data").get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Center(
+                child: SpinKitChasingDots(
+                  color: Tools.multiColors[Random().nextInt(3)],
+                ),
               ),
             );
           } else {
-            for (int i = 0; i < snapshot.data.data["data"].length; i++) {
-              teamList.add(Team.fromJson(
-                  Map<String, dynamic>.from(snapshot.data.data["data"][i])));
-            }
-            return DevScaffold(
-              title: "Team",
-              body: ListView.builder(
+            if (snapshot.hasError) {
+              return Center(
+                child: ErrorDialog(
+                  error: snapshot.error,
+                  child: Text(Devfest.some_error_text),
+                ),
+              );
+            } else {
+              teamList.clear();
+              for (int i = 0; i < snapshot.data.data["data"].length; i++) {
+                teamList.add(Team.fromJson(
+                    Map<String, dynamic>.from(snapshot.data.data["data"][i])));
+              }
+              if (teamList.length < 1) {
+                return Center(
+                  child: Text(Devfest.comingSoonText),
+                );
+              }
+              return ListView.builder(
                 itemCount: teamList.length,
                 shrinkWrap: true,
                 itemBuilder: (c, i) {
@@ -185,11 +192,11 @@ class TeamPage extends StatelessWidget {
                     ),
                   );
                 },
-              ),
-            );
+              );
+            }
           }
-        }
-      },
+        },
+      ),
     );
   }
 }

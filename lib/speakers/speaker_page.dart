@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
 import 'package:devfest_gandhinagar/universal/profileAvatar.dart';
+import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/home/home_bloc.dart';
@@ -66,41 +67,46 @@ class SpeakerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // var _homeBloc = HomeBloc();
     // var state = _homeBloc.currentState as InHomeState;
-    // var speakers = state.speakersData.speakers;
     speakerList = List<Speaker>();
-    return FutureBuilder<DocumentSnapshot>(
-      future: Firestore.instance.collection("speakers").document("data").get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: Center(
-              child: SpinKitChasingDots(
-                color: Tools.multiColors[Random().nextInt(3)],
-              ),
-            ),
-          );
-        } else {
-          if (snapshot.hasError) {
-            return Center(
-              child: ErrorDialog(
-                error: snapshot.error,
-                child: Text("Oops! Error Occured!"),
+    return DevScaffold(
+      title: "Speakers",
+      body: FutureBuilder<DocumentSnapshot>(
+        future:
+            Firestore.instance.collection("speakers").document("data").get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Center(
+                child: SpinKitChasingDots(
+                  color: Tools.multiColors[Random().nextInt(3)],
+                ),
               ),
             );
           } else {
-            for (int i = 0; i < snapshot.data.data["data"].length; i++) {
-              if (Speaker.fromJson(Map<String, dynamic>.from(
-                          snapshot.data.data["data"][i]))
-                      .isVisible ==
-                  true)
-                speakerList.add(Speaker.fromJson(
-                    Map<String, dynamic>.from(snapshot.data.data["data"][i])));
-            }
-            return DevScaffold(
-              title: "Speakers",
-              body: ListView.builder(
+            if (snapshot.hasError) {
+              return Center(
+                child: ErrorDialog(
+                  error: snapshot.error,
+                  child: Text(Devfest.some_error_text),
+                ),
+              );
+            } else {
+              for (int i = 0; i < snapshot.data.data["data"].length; i++) {
+                if (Speaker.fromJson(Map<String, dynamic>.from(
+                            snapshot.data.data["data"][i]))
+                        .isVisible ==
+                    true)
+                  speakerList.add(Speaker.fromJson(Map<String, dynamic>.from(
+                      snapshot.data.data["data"][i])));
+              }
+              if (speakerList.length < 1) {
+                return Center(
+                  child: Text(Devfest.comingSoonText),
+                );
+              }
+              return ListView.builder(
                 itemCount: speakerList.length,
                 shrinkWrap: true,
                 itemBuilder: (c, i) {
@@ -187,11 +193,11 @@ class SpeakerPage extends StatelessWidget {
                     ),
                   );
                 },
-              ),
-            );
+              );
+            }
           }
-        }
-      },
+        },
+      ),
     );
   }
 }
