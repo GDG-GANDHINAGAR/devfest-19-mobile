@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
 import 'package:devfest_gandhinagar/home/session.dart';
+import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/agenda/cloud_screen.dart';
 import 'package:devfest_gandhinagar/agenda/mobile_screen.dart';
@@ -48,8 +49,12 @@ class AgendaPage extends StatelessWidget {
             //       .add(Session.fromJson(snapshot.data.documents[i].data));
             // }
             for (int i = 0; i < snapshot.data.data["data"].length; i++) {
-              sessionList.add(Session.fromJson(
-                  Map<String, dynamic>.from(snapshot.data.data["data"][i])));
+              if (Speaker.fromJson(Map<String, dynamic>.from(
+                          snapshot.data.data["data"][i]))
+                      .isVisible ==
+                  true)
+                sessionList.add(Session.fromJson(
+                    Map<String, dynamic>.from(snapshot.data.data["data"][i])));
             }
             // print("Session data: $sessionList");
             return DefaultTabController(

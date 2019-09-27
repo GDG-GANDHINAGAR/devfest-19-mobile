@@ -34,6 +34,7 @@ class Speaker {
   String speakerSession;
   String sessionId;
   String sessionDetail;
+  bool isVisible;
 
   Speaker({
     this.speakerName,
@@ -48,6 +49,7 @@ class Speaker {
     this.speakerSession,
     this.sessionId,
     this.sessionDetail,
+    this.isVisible,
   });
 
   Speaker.fromJson(Map<String, dynamic> json) {
@@ -63,6 +65,7 @@ class Speaker {
     speakerSession = json['speaker_session'];
     sessionId = json['session_id'];
     sessionDetail = json["session_details"];
+    isVisible = json["show"];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +82,7 @@ class Speaker {
     data['speaker_session'] = this.speakerSession;
     data['session_id'] = this.sessionId;
     data["session_details"] = this.sessionDetail;
+    data["show"] = this.isVisible;
     return data;
   }
 }
