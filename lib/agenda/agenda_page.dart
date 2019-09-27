@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
 import 'package:devfest_gandhinagar/home/session.dart';
+import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/agenda/cloud_screen.dart';
 import 'package:devfest_gandhinagar/agenda/mobile_screen.dart';
@@ -20,9 +21,11 @@ class AgendaPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _homeBloc = HomeBloc();
-    return FutureBuilder<QuerySnapshot>(
-      future: Firestore.instance.collection("session").getDocuments(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    return FutureBuilder<DocumentSnapshot>(
+      // future: Firestore.instance.collection("session").getDocuments(),
+      future: Firestore.instance.collection("speakers").document("data").get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Container(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -41,9 +44,17 @@ class AgendaPage extends StatelessWidget {
             );
           } else {
             sessionList = List<Session>();
-            for (int i = 0; i < snapshot.data.documents.length; i++) {
-              sessionList
-                  .add(Session.fromJson(snapshot.data.documents[i].data));
+            // for (int i = 0; i < snapshot.data.documents.length; i++) {
+            //   sessionList
+            //       .add(Session.fromJson(snapshot.data.documents[i].data));
+            // }
+            for (int i = 0; i < snapshot.data.data["data"].length; i++) {
+              if (Speaker.fromJson(Map<String, dynamic>.from(
+                          snapshot.data.data["data"][i]))
+                      .isVisible ==
+                  true)
+                sessionList.add(Session.fromJson(
+                    Map<String, dynamic>.from(snapshot.data.data["data"][i])));
             }
             // print("Session data: $sessionList");
             return DefaultTabController(

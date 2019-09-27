@@ -33,19 +33,24 @@ class Speaker {
   String githubUrl;
   String speakerSession;
   String sessionId;
+  String sessionDetail;
+  bool isVisible;
 
-  Speaker(
-      {this.speakerName,
-      this.speakerDesc,
-      this.speakerImage,
-      this.speakerInfo,
-      this.speakerId,
-      this.fbUrl,
-      this.twitterUrl,
-      this.linkedinUrl,
-      this.githubUrl,
-      this.speakerSession,
-      this.sessionId});
+  Speaker({
+    this.speakerName,
+    this.speakerDesc,
+    this.speakerImage,
+    this.speakerInfo,
+    this.speakerId,
+    this.fbUrl,
+    this.twitterUrl,
+    this.linkedinUrl,
+    this.githubUrl,
+    this.speakerSession,
+    this.sessionId,
+    this.sessionDetail,
+    this.isVisible,
+  });
 
   Speaker.fromJson(Map<String, dynamic> json) {
     speakerName = json['speaker_name'];
@@ -59,6 +64,8 @@ class Speaker {
     githubUrl = json['github_url'];
     speakerSession = json['speaker_session'];
     sessionId = json['session_id'];
+    sessionDetail = json["session_details"];
+    isVisible = json["show"];
   }
 
   Map<String, dynamic> toJson() {
@@ -74,6 +81,8 @@ class Speaker {
     data['github_url'] = this.githubUrl;
     data['speaker_session'] = this.speakerSession;
     data['session_id'] = this.sessionId;
+    data["session_details"] = this.sessionDetail;
+    data["show"] = this.isVisible;
     return data;
   }
 }
