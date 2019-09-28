@@ -4,9 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
 import 'package:devfest_gandhinagar/utils/devfest.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/home/team.dart';
 import 'package:devfest_gandhinagar/universal/dev_scaffold.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
@@ -17,6 +15,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class TeamPage extends StatelessWidget {
   static const String routeName = "/team";
+  static List<Team> fullTeamList;
+  static List<Team> coreTeamList;
   static List<Team> teamList;
 
   Widget socialActions(context, Team team) => FittedBox(
@@ -65,8 +65,10 @@ class TeamPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    fullTeamList = List<Team>();
+    coreTeamList = List<Team>();
     teamList = List<Team>();
-    // var _homeBloc = HomeBloc();
+
     return DevScaffold(
       title: "Team",
       body: FutureBuilder<DocumentSnapshot>(
@@ -91,18 +93,30 @@ class TeamPage extends StatelessWidget {
                 ),
               );
             } else {
-              teamList.clear();
               for (int i = 0; i < snapshot.data.data["data"].length; i++) {
-                teamList.add(Team.fromJson(
-                    Map<String, dynamic>.from(snapshot.data.data["data"][i])));
+                // add core team members to the coreTeamList and others to teamList and
+                //join the two to get sorted list with core teams at the top
+                if (Team.fromJson(Map<String, dynamic>.from(
+                            snapshot.data.data["data"][i]))
+                        .isCore ==
+                    true) {
+                  coreTeamList.add(Team.fromJson(Map<String, dynamic>.from(
+                      snapshot.data.data["data"][i])));
+                } else {
+                  teamList.add(Team.fromJson(Map<String, dynamic>.from(
+                      snapshot.data.data["data"][i])));
+                }
               }
-              if (teamList.length < 1) {
+
+              fullTeamList = coreTeamList + teamList;
+
+              if (fullTeamList.length < 1) {
                 return Center(
                   child: Text(Devfest.comingSoonText),
                 );
               }
               return ListView.builder(
-                itemCount: teamList.length,
+                itemCount: fullTeamList.length,
                 shrinkWrap: true,
                 itemBuilder: (c, i) {
                   return Card(
@@ -128,7 +142,7 @@ class TeamPage extends StatelessWidget {
                                 child: CircleAvatar(
                                   radius: 55,
                                   backgroundImage: CachedNetworkImageProvider(
-                                    teamList[i].image,
+                                    fullTeamList[i].image,
                                   ),
                                   backgroundColor: Colors.white,
                                 ),
@@ -149,7 +163,7 @@ class TeamPage extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Text(
-                                      teamList[i].name,
+                                      fullTeamList[i].name,
                                       style: Theme.of(context).textTheme.title,
                                     ),
                                     SizedBox(
@@ -167,7 +181,7 @@ class TeamPage extends StatelessWidget {
                                       height: 10,
                                     ),
                                     Text(
-                                      teamList[i].job,
+                                      fullTeamList[i].job,
                                       style:
                                           Theme.of(context).textTheme.subtitle,
                                     ),
@@ -176,12 +190,12 @@ class TeamPage extends StatelessWidget {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                socialActions(context, teamList[i]),
+                                socialActions(context, fullTeamList[i]),
                                 SizedBox(
                                   height: 10,
                                 ),
                                 Text(
-                                  teamList[i].team,
+                                  fullTeamList[i].team,
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                               ],
