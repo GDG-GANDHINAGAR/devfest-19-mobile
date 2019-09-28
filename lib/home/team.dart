@@ -9,6 +9,7 @@ class Team {
   String linkedinUrl;
   String githubUrl;
   String team;
+  bool isCore;
 
   Team({
     this.name,
@@ -21,6 +22,7 @@ class Team {
     this.linkedinUrl,
     this.githubUrl,
     this.team,
+    this.isCore,
   });
 
   Team.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class Team {
     linkedinUrl = json['linkedin_url'];
     githubUrl = json['github_url'];
     team = json['team'];
+    isCore = json["core"];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +51,7 @@ class Team {
     data['linkedin_url'] = this.linkedinUrl;
     data['github_url'] = this.githubUrl;
     data['team'] = this.team;
+    data['isCore'] = this.isCore;
     return data;
   }
 }
