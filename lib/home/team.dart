@@ -10,6 +10,7 @@ class Team {
   String githubUrl;
   String team;
   bool isCore;
+  double index;
 
   Team({
     this.name,
@@ -23,6 +24,7 @@ class Team {
     this.githubUrl,
     this.team,
     this.isCore,
+    double index,
   });
 
   Team.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class Team {
     githubUrl = json['github_url'];
     team = json['team'];
     isCore = json["core"];
+    index = double.parse(json["index"].toString());
   }
 
   Map<String, dynamic> toJson() {
@@ -52,6 +55,7 @@ class Team {
     data['github_url'] = this.githubUrl;
     data['team'] = this.team;
     data['isCore'] = this.isCore;
+    data['index'] = this.index;
     return data;
   }
 }
