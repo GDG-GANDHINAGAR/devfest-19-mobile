@@ -89,7 +89,8 @@ class _MapPageState extends State<MapPage> {
                             ),
                         children: [
                           TextSpan(
-                              text: "Near Reliance Chowkdi, DA IICT Road,\nGandhinagar, Gujarat, India",
+                              text:
+                                  "Near Reliance Chowkdi, DA IICT Road,\nGandhinagar, Gujarat, India",
                               style: Theme.of(context).textTheme.subtitle,
                               children: []),
                         ]),

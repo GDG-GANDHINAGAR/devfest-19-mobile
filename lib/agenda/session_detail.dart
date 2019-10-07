@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:devfest_gandhinagar/home/session.dart';
 import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/universal/dev_scaffold.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
@@ -12,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SessionDetail extends StatelessWidget {
   static const String routeName = "/session_detail";
-  final Session session;
+  final Speaker session;
   static Speaker speaker = Speaker();
   static List<Speaker> speakerList;
 
@@ -91,6 +90,11 @@ class SessionDetail extends StatelessWidget {
                 speaker = speakerList[i];
               }
             }
+
+            speakerList.sort((a, b) {
+              return a.speakerId.compareTo(b.speakerId);
+            });
+
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -135,7 +139,7 @@ class SessionDetail extends StatelessWidget {
                     ),
                     Text(
                       "${speaker.sessionDetail}",
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.justify,
                       style: Theme.of(context)
                           .textTheme
                           .caption

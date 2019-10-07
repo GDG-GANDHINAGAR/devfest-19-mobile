@@ -7,8 +7,6 @@ import 'package:devfest_gandhinagar/universal/profileAvatar.dart';
 import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:devfest_gandhinagar/home/home_bloc.dart';
-import 'package:devfest_gandhinagar/home/index.dart';
 import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/universal/dev_scaffold.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
@@ -106,6 +104,11 @@ class SpeakerPage extends StatelessWidget {
                   child: Text(Devfest.comingSoonText),
                 );
               }
+
+              speakerList.sort((a, b) {
+                return a.speakerId.compareTo(b.speakerId);
+              });
+
               return ListView.builder(
                 itemCount: speakerList.length,
                 shrinkWrap: true,

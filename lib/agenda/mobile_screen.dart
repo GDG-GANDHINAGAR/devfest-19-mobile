@@ -1,11 +1,11 @@
+import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/agenda/session_list.dart';
 import 'package:devfest_gandhinagar/home/index.dart';
-import 'package:devfest_gandhinagar/home/session.dart';
 
 class MobileScreen extends StatelessWidget {
   final HomeBloc homeBloc;
-  final List<Session> sessions;
+  final List<Speaker> sessions;
 
   const MobileScreen({Key key, this.homeBloc, @required this.sessions})
       : super(key: key);
