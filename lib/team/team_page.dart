@@ -75,7 +75,8 @@ class TeamPage extends StatelessWidget {
         future: Firestore.instance.collection("team").document("data").get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.none ||
+              snapshot.connectionState == ConnectionState.waiting) {
             return Container(
               color: Theme.of(context).scaffoldBackgroundColor,
               child: Center(
@@ -107,6 +108,14 @@ class TeamPage extends StatelessWidget {
                       snapshot.data.data["data"][i])));
                 }
               }
+
+              coreTeamList.sort((a, b) {
+                return a.index.compareTo(a.index);
+              });
+
+              teamList.sort((a, b) {
+                return a.index.compareTo(a.index);
+              });
 
               fullTeamList = coreTeamList + teamList;
 
