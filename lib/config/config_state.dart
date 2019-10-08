@@ -35,7 +35,7 @@ class ErrorConfigState extends ConfigState {
   final String errorMessage;
 
   ErrorConfigState(this.errorMessage);
-  
+
   @override
   String toString() => 'ErrorConfigState';
 

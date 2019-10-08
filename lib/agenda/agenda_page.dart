@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
-import 'package:devfest_gandhinagar/home/session.dart';
 import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AgendaPage extends StatelessWidget {
   static const String routeName = "/agenda";
-  static List<Session> sessionList;
+  static List<Speaker> sessionList;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +79,7 @@ class AgendaPage extends StatelessWidget {
                   ),
                 );
               } else {
-                sessionList = List<Session>();
+                sessionList = List<Speaker>();
                 // for (int i = 0; i < snapshot.data.documents.length; i++) {
                 //   sessionList
                 //       .add(Session.fromJson(snapshot.data.documents[i].data));
@@ -90,9 +89,14 @@ class AgendaPage extends StatelessWidget {
                               snapshot.data.data["data"][i]))
                           .isVisible ==
                       true)
-                    sessionList.add(Session.fromJson(Map<String, dynamic>.from(
+                    sessionList.add(Speaker.fromJson(Map<String, dynamic>.from(
                         snapshot.data.data["data"][i])));
                 }
+
+                sessionList.sort((a, b) {
+                  return a.sessionId.compareTo(b.sessionId);
+                });
+
                 return TabBarView(
                   children: <Widget>[
                     WebScreen(

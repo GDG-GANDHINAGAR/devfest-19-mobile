@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/agenda/session_detail.dart';
@@ -8,7 +9,7 @@ import 'package:devfest_gandhinagar/home/session.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
 
 class SessionList extends StatelessWidget {
-  final List<Session> allSessions;
+  final List<Speaker> allSessions;
 
   const SessionList({Key key, @required this.allSessions}) : super(key: key);
   @override
@@ -39,14 +40,14 @@ class SessionList extends StatelessWidget {
             trailing: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: "${allSessions[i].sessionTotalTime}\n",
+                text: "${allSessions[i].totalTime}\n",
                 style: Theme.of(context)
                     .textTheme
                     .title
                     .copyWith(fontSize: 14, fontWeight: FontWeight.bold),
                 children: [
                   TextSpan(
-                    text: allSessions[i].sessionStartTime,
+                    text: allSessions[i].startTime,
                     style: Theme.of(context).textTheme.subtitle.copyWith(
                           fontSize: 12,
                         ),
@@ -64,7 +65,7 @@ class SessionList extends StatelessWidget {
             ),
             title: RichText(
               text: TextSpan(
-                text: "${allSessions[i].sessionTitle}\n",
+                text: "${allSessions[i].speakerSession}\n",
                 style: Theme.of(context).textTheme.title.copyWith(fontSize: 16),
                 children: [
                   TextSpan(

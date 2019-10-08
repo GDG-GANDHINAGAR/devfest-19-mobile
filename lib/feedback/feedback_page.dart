@@ -75,7 +75,6 @@ class _FeedbackPageState extends State<FeedbackPage> {
     );
   }
 
-
   Widget _starRowBuilder() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

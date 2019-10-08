@@ -160,7 +160,6 @@ class SignInPage extends StatelessWidget {
   }
 
   void setBasicData(FirebaseUser user) async {
-    
     Devfest.prefs.setString(Devfest.displayNamePref, user.displayName);
     Devfest.prefs.setString(Devfest.emailPref, user.email);
     Devfest.prefs.setString(Devfest.uidPref, user.uid);
