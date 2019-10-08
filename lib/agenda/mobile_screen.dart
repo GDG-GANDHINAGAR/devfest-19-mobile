@@ -11,8 +11,7 @@ class MobileScreen extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var mobileSessions =
-        sessions.where((s) => s.track == "mobile" || s.track == "ml").toList();
+    var mobileSessions = sessions.where((s) => s.track == "mobile").toList();
     return SessionList(
       allSessions: mobileSessions,
     );

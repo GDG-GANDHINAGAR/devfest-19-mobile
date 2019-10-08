@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/agenda/session_list.dart';
 import 'package:devfest_gandhinagar/home/index.dart';
 
-class CloudScreen extends StatelessWidget {
+class MLScreen extends StatelessWidget {
   final HomeBloc homeBloc;
   final List<Speaker> sessions;
 
-  const CloudScreen({Key key, this.homeBloc, @required this.sessions})
+  const MLScreen({Key key, this.homeBloc, @required this.sessions})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var cloudSessions =
-        sessions.where((s) => s.track == "cloud" || s.track == "misc").toList();
+    var mlSessions = sessions.where((s) => s.track == "ml").toList();
     return SessionList(
-      allSessions: cloudSessions,
+      allSessions: mlSessions,
     );
   }
 }
