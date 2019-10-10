@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devfest_gandhinagar/agenda/ml_screen.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
 import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:flutter/material.dart';
-import 'package:devfest_gandhinagar/agenda/cloud_screen.dart';
 import 'package:devfest_gandhinagar/agenda/mobile_screen.dart';
 import 'package:devfest_gandhinagar/agenda/web_screen.dart';
 import 'package:devfest_gandhinagar/home/index.dart';
@@ -41,16 +41,16 @@ class AgendaPage extends StatelessWidget {
               ),
             ),
             Tab(
-              child: Text("Mobile & ML"),
+              child: Text("Mobile"),
               icon: Icon(
                 FontAwesomeIcons.mobile,
                 size: 12,
               ),
             ),
             Tab(
-              child: Text("Cloud & Misc."),
+              child: Text("ML"),
               icon: Icon(
-                FontAwesomeIcons.cloud,
+                FontAwesomeIcons.cogs,
                 size: 12,
               ),
             ),
@@ -109,7 +109,7 @@ class AgendaPage extends StatelessWidget {
                       homeBloc: _homeBloc,
                       sessions: sessionList,
                     ),
-                    CloudScreen(
+                    MLScreen(
                       key: UniqueKey(),
                       homeBloc: _homeBloc,
                       sessions: sessionList,

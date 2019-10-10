@@ -5,7 +5,6 @@ import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/agenda/session_detail.dart';
-import 'package:devfest_gandhinagar/home/session.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
 
 class SessionList extends StatelessWidget {
