@@ -110,11 +110,11 @@ class TeamPage extends StatelessWidget {
               }
 
               coreTeamList.sort((a, b) {
-                return a.index.compareTo(a.index);
+                return a.index.compareTo(b.index);
               });
 
               teamList.sort((a, b) {
-                return a.index.compareTo(a.index);
+                return a.index.compareTo(b.index);
               });
 
               fullTeamList = coreTeamList + teamList;
