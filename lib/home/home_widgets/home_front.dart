@@ -27,20 +27,25 @@ class _HomeFrontState extends State<HomeFront> {
       // print("Widget Built");
       if (Devfest.prefs.getBool(Devfest.isUpdatedPref ?? true)) {
         print(
-            "App is Updated ${Devfest.prefs.getBool(Devfest.isUpdatedPref ?? true)}");
+            "Is App Updated: ${Devfest.prefs.getBool(Devfest.isUpdatedPref ?? true)}");
       } else {
         print("App is not Updated");
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("A new version is available"),
-              content: Text("Download Now?"),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: Text("Update available"),
+              content: Text(
+                  "We highly recommend using the version ${Devfest.prefs.getString(Devfest.recommendedVersionPref)} for the best experience.\nDownload now?"),
               actions: <Widget>[
                 FlatButton(
                   child: Text("OK"),
                   onPressed: () {
-                    launch("https://devfest.gdggandhinagar.org");
+                    launch(
+                        "https://github.com/GDG-GANDHINAGAR/devfest-19-mobile/releases");
                   },
                 ),
                 FlatButton(

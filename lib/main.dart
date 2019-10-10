@@ -36,15 +36,19 @@ Future<void> main() async {
   DocumentSnapshot snapshot =
       await Firestore.instance.collection("homepage").document("data").get();
 
-  // setting the default value of isUpdated to true
+  // Setting the default value of isUpdated to true
   // in case the app is offline and firestore fetch query fails
-  if (snapshot.data["meta"]["app_version_code"] == Devfest.app_version_code ??
+  if (snapshot.data["meta"]["app_version_code"] <= Devfest.app_version_code ??
       true) {
     Devfest.prefs.setBool(Devfest.isUpdatedPref, true);
-    print("Set isupdated bool to true");
+    Devfest.prefs.setString(Devfest.recommendedVersionPref,
+        snapshot.data["meta"]["app_version_name"] ?? "1.0.0");
+    // print("Set isupdated bool to true");
   } else {
     Devfest.prefs.setBool(Devfest.isUpdatedPref, false);
-    print("Set isupdated bool to false");
+    Devfest.prefs.setString(Devfest.recommendedVersionPref,
+        snapshot.data["meta"]["app_version_name"] ?? "1.0.0");
+    // print("Set isupdated bool to false");
   }
 
   runApp(ConfigPage());
