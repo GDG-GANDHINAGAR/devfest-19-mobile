@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:devfest_gandhinagar/id/id_page.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_gandhinagar/agenda/agenda_page.dart';
 import 'package:devfest_gandhinagar/config/index.dart';
@@ -11,10 +10,58 @@ import 'package:devfest_gandhinagar/team/team_page.dart';
 import 'package:devfest_gandhinagar/universal/image_card.dart';
 import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HomeFront extends StatelessWidget {
+class HomeFront extends StatefulWidget {
+  @override
+  _HomeFrontState createState() => _HomeFrontState();
+}
+
+class _HomeFrontState extends State<HomeFront> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // print("Widget Built");
+      if (Devfest.prefs.getBool(Devfest.isUpdatedPref ?? true)) {
+        print(
+            "Is App Updated: ${Devfest.prefs.getBool(Devfest.isUpdatedPref ?? true)}");
+      } else {
+        print("App is not Updated");
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: Text("Update available"),
+              content: Text(
+                  "We highly recommend using the version ${Devfest.prefs.getString(Devfest.recommendedVersionPref)} for the best experience.\nDownload now?"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    launch(
+                        "https://github.com/GDG-GANDHINAGAR/devfest-19-mobile/releases");
+                  },
+                ),
+                FlatButton(
+                  child: Text("Remind me later"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+  }
+
   List<Widget> devFestTexts(context) => [
         Text(
           Devfest.welcomeText,
@@ -39,59 +86,7 @@ class HomeFront extends StatelessWidget {
     }
   }
 
-  Widget actions(context) => Wrap(
-        alignment: WrapAlignment.center,
-        spacing: 10.0,
-        children: <Widget>[
-          RaisedButton(
-            child: Text("Agenda"),
-            shape: StadiumBorder(),
-            color: Colors.red,
-            colorBrightness: Brightness.dark,
-            onPressed: () => Navigator.pushNamed(context, AgendaPage.routeName),
-          ),
-          RaisedButton(
-            child: Text("Speakers"),
-            shape: StadiumBorder(),
-            color: Colors.green,
-            colorBrightness: Brightness.dark,
-            onPressed: () =>
-                Navigator.pushNamed(context, SpeakerPage.routeName),
-          ),
-          RaisedButton(
-            child: Text("Sponsors"),
-            shape: StadiumBorder(),
-            color: Colors.orange,
-            colorBrightness: Brightness.dark,
-            onPressed: () =>
-                Navigator.pushNamed(context, SponsorPage.routeName),
-          ),
-          RaisedButton(
-            child: Text("Team"),
-            shape: StadiumBorder(),
-            color: Colors.purple,
-            colorBrightness: Brightness.dark,
-            onPressed: () => Navigator.pushNamed(context, TeamPage.routeName),
-          ),
-          RaisedButton(
-            child: Text("Feedback"),
-            shape: StadiumBorder(),
-            color: Colors.brown,
-            colorBrightness: Brightness.dark,
-            onPressed: () =>
-                Navigator.pushNamed(context, FeedbackPage.routeName),
-          ),
-          RaisedButton(
-            child: Text("Locate Us"),
-            shape: StadiumBorder(),
-            color: Colors.blue,
-            colorBrightness: Brightness.dark,
-            onPressed: () => Navigator.pushNamed(context, MapPage.routeName),
-          ),
-        ],
-      );
-
-  Widget newActions(context) => Wrap(
+  Widget newActionsFeedbackEnabled(context) => Wrap(
         alignment: WrapAlignment.center,
         spacing: 20.0,
         runSpacing: 20.0,
@@ -128,62 +123,52 @@ class HomeFront extends StatelessWidget {
             title: Devfest.map_text,
             onPressed: () => Navigator.pushNamed(context, MapPage.routeName),
           ),
-          //streambuilder controlled Show ID
-          //and feedback button
-          StreamBuilder<DocumentSnapshot>(
-            stream: Firestore.instance
-                .collection("homepage")
-                .document("data")
-                .snapshots(),
-            builder: (BuildContext context,
-                AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (snapshot.connectionState == ConnectionState.active &&
-                  snapshot.hasError == false &&
-                  snapshot.data.data["meta"]["feedback_active"] == true) {
-                return ActionCard(
-                  icon: Icons.feedback,
-                  color: Colors.blue,
-                  title: Devfest.feedback_text,
-                  onPressed: () =>
-                      Navigator.pushNamed(context, FeedbackPage.routeName),
-                );
-              } else {
-                return ActionCard(
-                  icon: Icons.person,
-                  color: Colors.blue,
-                  title: Devfest.show_id_text,
-                  onPressed: () =>
-                      Navigator.pushNamed(context, IDPage.routeName),
-                );
-              }
-              // if (snapshot.connectionState == ConnectionState.none ||
-              //     snapshot.connectionState == ConnectionState.waiting) {
-              //   return ActionCard();
-              // } else {
-              //   if (snapshot.hasError) {
-              //     print("Has error ${snapshot.error}");
-              //     return Container(
-              //       width: 0,
-              //       height: 0,
-              //     );
-              //   } else {
-              //     if (snapshot.data.data["meta"]["feedback_active"] == true) {
-              //       return ActionCard(
-              //         icon: Icons.feedback,
-              //         color: Colors.blue,
-              //         title: Devfest.feedback_text,
-              //         onPressed: () =>
-              //             Navigator.pushNamed(context, FeedbackPage.routeName),
-              //       );
-              //     } else {
-              //       return Container(
-              //         width: 0,
-              //         height: 0,
-              //       );
-              //     }
-              //   }
-              // }
-            },
+          ActionCard(
+            icon: Icons.feedback,
+            color: Colors.blue,
+            title: Devfest.feedback_text,
+            onPressed: () =>
+                Navigator.pushNamed(context, FeedbackPage.routeName),
+          ),
+        ],
+      );
+
+  Widget newActionsFeedbackDisabled(context) => Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 20.0,
+        runSpacing: 20.0,
+        children: <Widget>[
+          ActionCard(
+            icon: Icons.schedule,
+            color: Colors.red,
+            title: Devfest.agenda_text,
+            onPressed: () => Navigator.pushNamed(context, AgendaPage.routeName),
+          ),
+          ActionCard(
+            icon: Icons.person,
+            color: Colors.green,
+            title: Devfest.speakers_text,
+            onPressed: () =>
+                Navigator.pushNamed(context, SpeakerPage.routeName),
+          ),
+          ActionCard(
+            icon: Icons.people,
+            color: Colors.amber,
+            title: Devfest.team_text,
+            onPressed: () => Navigator.pushNamed(context, TeamPage.routeName),
+          ),
+          ActionCard(
+            icon: Icons.attach_money,
+            color: Colors.purple,
+            title: Devfest.sponsor_text,
+            onPressed: () =>
+                Navigator.pushNamed(context, SponsorPage.routeName),
+          ),
+          ActionCard(
+            icon: Icons.map,
+            color: Colors.blue,
+            title: Devfest.map_text,
+            onPressed: () => Navigator.pushNamed(context, MapPage.routeName),
           ),
         ],
       );
@@ -220,8 +205,9 @@ class HomeFront extends StatelessWidget {
         ),
       );
 
-  @override
-  Widget build(BuildContext context) {
+  Widget homePage(
+      {@required BuildContext context, @required bool feedbackVisible}) {
+    // showUpdateDialog(context);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -240,7 +226,10 @@ class HomeFront extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            newActions(context),
+            //control visibility of feedback form
+            feedbackVisible
+                ? newActionsFeedbackEnabled(context)
+                : newActionsFeedbackDisabled(context),
             SizedBox(
               height: 20,
             ),
@@ -256,6 +245,124 @@ class HomeFront extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: Firestore.instance
+          .collection("homepage")
+          .document("data")
+          .snapshots(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.none ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          return homePage(context: context, feedbackVisible: false);
+        } else {
+          if (snapshot.hasError) {
+            print("Error Occured:${snapshot.error}");
+            return homePage(context: context, feedbackVisible: false);
+          } else {
+            if (snapshot.data.data["meta"]["app_version_code"] ==
+                Devfest.app_version_code) {
+              return homePage(
+                context: context,
+                feedbackVisible: snapshot.data.data["meta"]["feedback_active"],
+              );
+            } else {
+              return homePage(
+                context: context,
+                feedbackVisible: snapshot.data.data["meta"]["feedback_active"],
+              );
+            }
+          }
+        }
+      },
+    );
+    // return showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return AlertDialog(
+    //       title: Text("Update Available"),
+    //       content: Text(
+    //           "A new version v${snapshot.data.data["meta"]["app_version_code"]} of the app is available. Download now?"),
+    //       actions: <Widget>[
+    //         FlatButton(
+    //           child: Text("OK"),
+    //           onPressed: () {
+    //             launch("https://devfest.gdggandhinagar.org");
+    //           },
+    //         ),
+    //         FlatButton(
+    //           onPressed: () {
+    //             Navigator.pop(context);
+    //           },
+    //           child: Text("Cancel"),
+    //         )
+    //       ],
+    //     );
+    //   },
+    // );
+    // return SingleChildScrollView(
+    //   child: Padding(
+    //     padding: const EdgeInsets.all(12.0),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.center,
+    //       children: <Widget>[
+    //         ImageCard(
+    //           img: ConfigBloc().darkModeOn
+    //               ? Devfest.banner_dark
+    //               : Devfest.banner_light,
+    //         ),
+    //         SizedBox(
+    //           height: 20,
+    //         ),
+    //         ...devFestTexts(context),
+    //         SizedBox(
+    //           height: 20,
+    //         ),
+    //         //streambuilder controlled feedback button
+    //         StreamBuilder<DocumentSnapshot>(
+    //           stream: Firestore.instance
+    //               .collection("homepage")
+    //               .document("data")
+    //               .snapshots(),
+    //           builder: (BuildContext context,
+    //               AsyncSnapshot<DocumentSnapshot> snapshot) {
+    //             if (snapshot.connectionState == ConnectionState.none ||
+    //                 snapshot.connectionState == ConnectionState.waiting) {
+    //               return newActionsFeedbackDisabled(context);
+    //             } else {
+    //               if (snapshot.hasError) {
+    //                 print("Has error ${snapshot.error}");
+    //                 return newActionsFeedbackDisabled(context);
+    //               } else {
+    //                 if (snapshot.data.data["meta"]["feedback_active"] == true) {
+    //                   return newActionsFeedbackEnabled(context);
+    //                 } else {
+    //                   return newActionsFeedbackDisabled(context);
+    //                 }
+    //               }
+    //             }
+    //           },
+    //         ),
+    //         SizedBox(
+    //           height: 20,
+    //         ),
+    //         socialActions(context),
+    //         SizedBox(
+    //           height: 20,
+    //         ),
+    //         Text(
+    //           Devfest.app_version,
+    //           style: Theme.of(context).textTheme.caption.copyWith(fontSize: 10),
+    //         )
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }
 
