@@ -10,10 +10,53 @@ import 'package:devfest_gandhinagar/team/team_page.dart';
 import 'package:devfest_gandhinagar/universal/image_card.dart';
 import 'package:devfest_gandhinagar/utils/devfest.dart';
 import 'package:devfest_gandhinagar/utils/tools.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HomeFront extends StatelessWidget {
+class HomeFront extends StatefulWidget {
+  @override
+  _HomeFrontState createState() => _HomeFrontState();
+}
+
+class _HomeFrontState extends State<HomeFront> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // print("Widget Built");
+      if (Devfest.prefs.getBool(Devfest.isUpdatedPref ?? true)) {
+        print(
+            "App is Updated ${Devfest.prefs.getBool(Devfest.isUpdatedPref ?? true)}");
+      } else {
+        print("App is not Updated");
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("A new version is available"),
+              content: Text("Download Now?"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    launch("https://devfest.gdggandhinagar.org");
+                  },
+                ),
+                FlatButton(
+                  child: Text("Remind me later"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+  }
+
   List<Widget> devFestTexts(context) => [
         Text(
           Devfest.welcomeText,
@@ -157,8 +200,9 @@ class HomeFront extends StatelessWidget {
         ),
       );
 
-  @override
-  Widget build(BuildContext context) {
+  Widget homePage(
+      {@required BuildContext context, @required bool feedbackVisible}) {
+    // showUpdateDialog(context);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -177,31 +221,10 @@ class HomeFront extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            //streambuilder controlled feedback button
-            StreamBuilder<DocumentSnapshot>(
-              stream: Firestore.instance
-                  .collection("homepage")
-                  .document("data")
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.connectionState == ConnectionState.none ||
-                    snapshot.connectionState == ConnectionState.waiting) {
-                  return newActionsFeedbackDisabled(context);
-                } else {
-                  if (snapshot.hasError) {
-                    print("Has error ${snapshot.error}");
-                    return newActionsFeedbackDisabled(context);
-                  } else {
-                    if (snapshot.data.data["meta"]["feedback_active"] == true) {
-                      return newActionsFeedbackEnabled(context);
-                    } else {
-                      return newActionsFeedbackDisabled(context);
-                    }
-                  }
-                }
-              },
-            ),
+            //control visibility of feedback form
+            feedbackVisible
+                ? newActionsFeedbackEnabled(context)
+                : newActionsFeedbackDisabled(context),
             SizedBox(
               height: 20,
             ),
@@ -217,6 +240,124 @@ class HomeFront extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: Firestore.instance
+          .collection("homepage")
+          .document("data")
+          .snapshots(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.none ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          return homePage(context: context, feedbackVisible: false);
+        } else {
+          if (snapshot.hasError) {
+            print("Error Occured:${snapshot.error}");
+            return homePage(context: context, feedbackVisible: false);
+          } else {
+            if (snapshot.data.data["meta"]["app_version_code"] ==
+                Devfest.app_version_code) {
+              return homePage(
+                context: context,
+                feedbackVisible: snapshot.data.data["meta"]["feedback_active"],
+              );
+            } else {
+              return homePage(
+                context: context,
+                feedbackVisible: snapshot.data.data["meta"]["feedback_active"],
+              );
+            }
+          }
+        }
+      },
+    );
+    // return showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return AlertDialog(
+    //       title: Text("Update Available"),
+    //       content: Text(
+    //           "A new version v${snapshot.data.data["meta"]["app_version_code"]} of the app is available. Download now?"),
+    //       actions: <Widget>[
+    //         FlatButton(
+    //           child: Text("OK"),
+    //           onPressed: () {
+    //             launch("https://devfest.gdggandhinagar.org");
+    //           },
+    //         ),
+    //         FlatButton(
+    //           onPressed: () {
+    //             Navigator.pop(context);
+    //           },
+    //           child: Text("Cancel"),
+    //         )
+    //       ],
+    //     );
+    //   },
+    // );
+    // return SingleChildScrollView(
+    //   child: Padding(
+    //     padding: const EdgeInsets.all(12.0),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.center,
+    //       children: <Widget>[
+    //         ImageCard(
+    //           img: ConfigBloc().darkModeOn
+    //               ? Devfest.banner_dark
+    //               : Devfest.banner_light,
+    //         ),
+    //         SizedBox(
+    //           height: 20,
+    //         ),
+    //         ...devFestTexts(context),
+    //         SizedBox(
+    //           height: 20,
+    //         ),
+    //         //streambuilder controlled feedback button
+    //         StreamBuilder<DocumentSnapshot>(
+    //           stream: Firestore.instance
+    //               .collection("homepage")
+    //               .document("data")
+    //               .snapshots(),
+    //           builder: (BuildContext context,
+    //               AsyncSnapshot<DocumentSnapshot> snapshot) {
+    //             if (snapshot.connectionState == ConnectionState.none ||
+    //                 snapshot.connectionState == ConnectionState.waiting) {
+    //               return newActionsFeedbackDisabled(context);
+    //             } else {
+    //               if (snapshot.hasError) {
+    //                 print("Has error ${snapshot.error}");
+    //                 return newActionsFeedbackDisabled(context);
+    //               } else {
+    //                 if (snapshot.data.data["meta"]["feedback_active"] == true) {
+    //                   return newActionsFeedbackEnabled(context);
+    //                 } else {
+    //                   return newActionsFeedbackDisabled(context);
+    //                 }
+    //               }
+    //             }
+    //           },
+    //         ),
+    //         SizedBox(
+    //           height: 20,
+    //         ),
+    //         socialActions(context),
+    //         SizedBox(
+    //           height: 20,
+    //         ),
+    //         Text(
+    //           Devfest.app_version,
+    //           style: Theme.of(context).textTheme.caption.copyWith(fontSize: 10),
+    //         )
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }
 

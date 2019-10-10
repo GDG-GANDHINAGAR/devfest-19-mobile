@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:devfest_gandhinagar/utils/dependency_injection.dart';
@@ -30,6 +31,21 @@ Future<void> main() async {
 
   // * Set flavor for your app. For eg - MOCK for offline, REST for some random server calls to your backend, FIREBASE for firebase calls
   Injector.configure(Flavor.MOCK);
+
+  //* To check if the app is running on latest version
+  DocumentSnapshot snapshot =
+      await Firestore.instance.collection("homepage").document("data").get();
+
+  // setting the default value of isUpdated to true
+  // in case the app is offline and firestore fetch query fails
+  if (snapshot.data["meta"]["app_version_code"] == Devfest.app_version_code ??
+      true) {
+    Devfest.prefs.setBool(Devfest.isUpdatedPref, true);
+    print("Set isupdated bool to true");
+  } else {
+    Devfest.prefs.setBool(Devfest.isUpdatedPref, false);
+    print("Set isupdated bool to false");
+  }
 
   runApp(ConfigPage());
 }

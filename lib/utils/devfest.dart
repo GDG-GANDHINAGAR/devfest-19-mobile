@@ -78,4 +78,5 @@ class Devfest {
   static const String photoPref = "photoPref";
   static const String isAdminPref = "isAdminPref";
   static const String darkModePref = "darkModePref";
+  static const String isUpdatedPref = "isUpdatedPref";
 }
