@@ -137,52 +137,55 @@ class HomeFront extends StatelessWidget {
                 .snapshots(),
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (snapshot.connectionState == ConnectionState.active &&
-                  snapshot.hasError == false &&
-                  snapshot.data.data["meta"]["feedback_active"] == true) {
-                return ActionCard(
-                  icon: Icons.feedback,
-                  color: Colors.blue,
-                  title: Devfest.feedback_text,
-                  onPressed: () =>
-                      Navigator.pushNamed(context, FeedbackPage.routeName),
+              // if (snapshot.connectionState == ConnectionState.active &&
+              //     snapshot.hasError == false &&
+              //     snapshot.data.data["meta"]["feedback_active"] == true) {
+              //   return ActionCard(
+              //     icon: Icons.feedback,
+              //     color: Colors.blue,
+              //     title: Devfest.feedback_text,
+              //     onPressed: () =>
+              //         Navigator.pushNamed(context, FeedbackPage.routeName),
+              //   );
+              // } else {
+              //   return ActionCard(
+              //     icon: Icons.person,
+              //     color: Colors.blue,
+              //     title: Devfest.show_id_text,
+              //     onPressed: () =>
+              //         Navigator.pushNamed(context, IDPage.routeName),
+              //   );
+              // }
+              if (snapshot.connectionState == ConnectionState.none ||
+                  snapshot.connectionState == ConnectionState.waiting) {
+                return Container(
+                  height: 0,
+                  width: 0,
                 );
               } else {
-                return ActionCard(
-                  icon: Icons.person,
-                  color: Colors.blue,
-                  title: Devfest.show_id_text,
-                  onPressed: () =>
-                      Navigator.pushNamed(context, IDPage.routeName),
-                );
+                if (snapshot.hasError) {
+                  print("Has error ${snapshot.error}");
+                  return Container(
+                    width: 0,
+                    height: 0,
+                  );
+                } else {
+                  if (snapshot.data.data["meta"]["feedback_active"] == true) {
+                    return ActionCard(
+                      icon: Icons.feedback,
+                      color: Colors.blue,
+                      title: Devfest.feedback_text,
+                      onPressed: () =>
+                          Navigator.pushNamed(context, FeedbackPage.routeName),
+                    );
+                  } else {
+                    return Container(
+                      width: 0,
+                      height: 0,
+                    );
+                  }
+                }
               }
-              // if (snapshot.connectionState == ConnectionState.none ||
-              //     snapshot.connectionState == ConnectionState.waiting) {
-              //   return ActionCard();
-              // } else {
-              //   if (snapshot.hasError) {
-              //     print("Has error ${snapshot.error}");
-              //     return Container(
-              //       width: 0,
-              //       height: 0,
-              //     );
-              //   } else {
-              //     if (snapshot.data.data["meta"]["feedback_active"] == true) {
-              //       return ActionCard(
-              //         icon: Icons.feedback,
-              //         color: Colors.blue,
-              //         title: Devfest.feedback_text,
-              //         onPressed: () =>
-              //             Navigator.pushNamed(context, FeedbackPage.routeName),
-              //       );
-              //     } else {
-              //       return Container(
-              //         width: 0,
-              //         height: 0,
-              //       );
-              //     }
-              //   }
-              // }
             },
           ),
         ],
