@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:devfest_gandhinagar/agenda/ml_screen.dart';
+import 'package:devfest_gandhinagar/agenda/cloud_screen.dart';
 import 'package:devfest_gandhinagar/dialogs/error_dialog.dart';
 import 'package:devfest_gandhinagar/home/speaker.dart';
 import 'package:devfest_gandhinagar/utils/devfest.dart';
@@ -41,16 +41,16 @@ class AgendaPage extends StatelessWidget {
               ),
             ),
             Tab(
-              child: Text("Mobile"),
+              child: Text("Mobile & ML"),
               icon: Icon(
                 FontAwesomeIcons.mobile,
                 size: 12,
               ),
             ),
             Tab(
-              child: Text("ML"),
+              child: Text("Cloud & Misc"),
               icon: Icon(
-                FontAwesomeIcons.cogs,
+                FontAwesomeIcons.cloud,
                 size: 12,
               ),
             ),
